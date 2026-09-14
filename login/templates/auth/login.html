@@ -1,0 +1,14 @@
+{% extends "auth/master_login.html" %}
+
+{% load static %}
+
+{% block title %}<title>Login</title>{% endblock title %}
+
+{% block content %}
+    <h3 class="text-center">Login</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+{% endblock content %}

@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/travel-agent.png' %}" type="image/x-icon">
+
+    {% block titulo %}{% endblock titulo %}
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'library/bootstrap/bootstrap.min.css' %}">
+
+    <!-- Bootswatch CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/sandstone/bootstrap.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <main>{% block contenido %}{% endblock contenido %}</main>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="{% static 'library/bootstrap/bootstrap.min.js' %}"></script>
+</body>
+</html>
