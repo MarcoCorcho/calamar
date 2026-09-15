@@ -5,9 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{% static 'img/travel-agent.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/calamar_icon.png' %}" type="image/x-icon">
 
-    {% block titulo %}{% endblock titulo %}
+    {% block title %}{% endblock title %}
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -25,7 +25,7 @@
 </head>
 <body>
 
-  <main>{% block contenido %}{% endblock contenido %}</main>
+  <main>{% block content %}{% endblock content %}</main>
 
     <!-- Bootstrap JS Bundle -->
     <script src="{% static 'library/bootstrap/bootstrap.min.js' %}"></script>

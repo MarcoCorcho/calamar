@@ -1,0 +1,104 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{% static 'img/calamar_icon.png' %}" type="image/x-icon">
+
+    {% block title %}{% endblock title %}
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'library/bootstrap/bootstrap.min.css' %}">
+
+    <!-- Bootswatch CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/sandstone/bootstrap.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+
+    <!-- IziToast CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/js/iziToast.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/izitoast@1.4.0/dist/css/iziToast.min.css">
+
+    <script src="{% static 'js/messages.js' %}"></script>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#" style="letter-spacing: 25px;">CALAMAR</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'main' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounting_menu' %}">Accounting</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Purchases</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Inventory</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Sales</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Configuration</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+    <main>
+      <div class="container-fluid vh-100 p-0 d-flex">
+        <!-- Sidebar -->
+        <div class="bg-light text-dark p-3" style="width: 280px;">
+          {% block sidebar %}
+          {% endblock %}
+        </div>
+
+        <!-- Right Content -->
+        <div class="flex-grow-1 p-4 bg-light overflow-auto">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+    </main>
+
+    {% for message in messages %}
+        <script>
+            iziToast.success({
+                title: 'Success',
+                message: '{{ message }}',
+                position: 'topRight'
+            });
+        </script>
+    {% endfor %}
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="{% static 'library/bootstrap/bootstrap.min.js' %}"></script>
+</body>
+</html>

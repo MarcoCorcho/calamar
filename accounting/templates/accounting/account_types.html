@@ -1,0 +1,51 @@
+{% extends 'master/master.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Account Types</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Account Types</h1>
+        <div>
+            <a href="#" class="btn btn-primary">+ Account Type</a>
+        </div>
+        {% if account_types %}
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account_type in account_types %}
+                            <tr>
+                                <td>{{ account_type.id }}</td>
+                                <td>{{ account_type.description }}</td>
+                                <td>{{ account_type.status }}</td>
+                                <td>{{ account_type.created_at }}</td>
+                                <td>{{ account_type.updated_at }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <p>No account types found.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
