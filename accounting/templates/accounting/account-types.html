@@ -10,7 +10,7 @@
     <div class="container mt-4">
         <h1>Account Types</h1>
         <div>
-            <a href="#" class="btn btn-primary">+ Account Type</a>
+            <a href="{% url 'add_account_type' %}" class="btn btn-primary">+ Add</a>
         </div>
         {% if account_types %}
             <div>
@@ -34,8 +34,8 @@
                                 <td>{{ account_type.created_at }}</td>
                                 <td>{{ account_type.updated_at }}</td>
                                 <td>
-                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
-                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="{% url 'edit_account_type' account_type.id %}" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="javascript:void(0)" onclick="deleteRecord('/accounting/delete-account-type/{{account_type.id}}/', 'Account Type')" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                         {% endfor %}
