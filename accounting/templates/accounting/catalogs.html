@@ -1,0 +1,55 @@
+{% extends "master/master.html" %}
+
+{% load static %}
+
+{% block title %}
+    <title>Catalog</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Catalog</h1>
+        <div>
+            <a href="{% url 'add_catalog' %}" class="btn btn-primary">+ Add</a>
+        </div>
+        {% if catalogs %}
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Code</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Account Type</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for catalog in catalogs %}
+                            <tr>
+                                <td>{{ catalog.id }}</td>
+                                <td>{{ catalog.code }}</td>
+                                <td>{{ catalog.description }}</td>
+                                <td>{{ catalog.status }}</td>
+                                <td>{{ catalog.account_type }}
+                                <td>{{ catalog.created_at }}</td>
+                                <td>{{ catalog.updated_at }}</td>
+                                <td>
+                                    <a href="#" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                <p>No account types found.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

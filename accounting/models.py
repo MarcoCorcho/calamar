@@ -19,6 +19,7 @@ class AccountType(models.Model):
 
 # Catalog Model
 class Catalog(models.Model):
+    code = models.CharField(max_length=20)
     description = models.CharField(max_length=100)
     status = models.BooleanField(default=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')

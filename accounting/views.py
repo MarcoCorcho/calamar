@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import AccountType, Catalog, Period, AccountingEntryHeader, AccountingEntryDetail
-from .forms import AccountTypeForm
+from .forms import AccountTypeForm, CatalogForm
 from django.template import loader
 from django.contrib import messages
 
@@ -58,3 +58,42 @@ def delete_account_type(request, account_type_id):
     account_type = AccountType.objects.get(id=account_type_id)
     account_type.delete()
     return redirect('/accounting/account-types/')
+
+# View for Catalog
+def catalogs(request):
+    catalogs = Catalog.objects.all()
+    template_name = 'accounting/catalogs.html'
+    context = {
+        'catalogs': catalogs,
+    }
+    return render(request, template_name, context)
+
+# View to add new Catalog
+def add_catalog(request):
+    if request.method == 'POST':
+        form = CatalogForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            description = form.cleaned_data['description']
+            status = form.cleaned_data['status']
+            parent = form.cleaned_data['parent']
+            account_type = form.cleaned_data['account_type']
+            Catalog.objects.create(description=description, status=status, parent=parent, account_type=account_type)
+            messages.success(request, 'Catalog added')
+            return redirect('/accounting/catalogs/')
+    else:
+        form = CatalogForm()
+        
+    template = loader.get_template('accounting/add-catalog.html')
+    context = {
+       'form': form,
+    }
+    return HttpResponse(template.render(context, request))
+
+# View to edit an existing Catalog
+def edit_catalog(request, catalog_id):
+    pass
+
+# View to delete an existing Catalog
+def delete_catalog(request, catalog_id):
+    pass
