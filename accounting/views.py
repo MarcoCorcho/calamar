@@ -78,7 +78,7 @@ def add_catalog(request):
             status = form.cleaned_data['status']
             parent = form.cleaned_data['parent']
             account_type = form.cleaned_data['account_type']
-            Catalog.objects.create(description=description, status=status, parent=parent, account_type=account_type)
+            Catalog.objects.create(code=code, description=description, status=status, parent=parent, account_type=account_type)
             messages.success(request, 'Catalog added')
             return redirect('/accounting/catalogs/')
     else:
@@ -92,8 +92,19 @@ def add_catalog(request):
 
 # View to edit an existing Catalog
 def edit_catalog(request, catalog_id):
-    pass
+    catalog = get_object_or_404(Catalog, id=catalog_id)
+    if request.method == 'POST':
+        form = CatalogForm(request.POST, instance=catalog)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Catalog account updated')
+            return redirect('/accounting/catalogs/')
+    else:
+        form = CatalogForm(instance=catalog)
+    return render(request, 'accounting/edit-catalog.html', {'form': form, 'catalog': catalog})
 
 # View to delete an existing Catalog
 def delete_catalog(request, catalog_id):
-    pass
+    catalog = Catalog.objects.get(id=catalog_id)
+    catalog.delete()
+    return redirect('/accounting/catalogs/')

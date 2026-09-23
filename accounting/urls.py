@@ -11,4 +11,6 @@ urlpatterns = [
     path('delete-account-type/<int:account_type_id>/', views.delete_account_type, name='delete_account_type'),
     path('catalogs/', views.catalogs, name='catalogs'),
     path('add-catalog/', views.add_catalog, name='add_catalog'),
+    path('edit-catalog/<int:catalog_id>/', views.edit_catalog, name='edit_catalog'),
+    path('delete-catalog/<int:account_type_id>/', views.delete_catalog, name='delete_catalog'),
 ]

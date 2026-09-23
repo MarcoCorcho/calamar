@@ -3,17 +3,17 @@
 {% load static %}
 
 {% block title %}
-    <title>Add Catalog</title>
+    <title>Add Catalog Account</title>
 {% endblock title %}
 
 {% block content %}
     <div class="container mt-4">
-        <h1>Add Catalog</h1>
+        <h1>Add Catalog Account</h1>
         <form method="post" action="{% url 'add_catalog' %}">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Add</button>
-            <button onclick="history.back()" class="btn btn-success">Back</button>
+            <button type="submit" class="btn btn-outline-primary">Add</button>
+            <button onclick="history.back()" class="btn btn-outline-success">Back</button>
         </form>
     </div>
 {% endblock content %}

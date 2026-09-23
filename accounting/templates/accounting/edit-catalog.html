@@ -3,13 +3,13 @@
 {% load static %}
 
 {% block title %}
-    <title>Edit Account Type</title>
+    <title>Edit Catalog</title>
 {% endblock title %}
 
 {% block content %}
     <div class="container mt-4">
-        <h1>Edit Account Type</h1>
-        <form method="post" action="{% url 'edit_account_type' account_type.id %}">
+        <h1>Edit Catalog</h1>
+        <form method="post" action="{% url 'edit_catalog' catalog.id %}">
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit" class="btn btn-outline-primary">Update</button>            
