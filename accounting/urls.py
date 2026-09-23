@@ -4,7 +4,8 @@ from . import views
 # Create your urls here.
 
 urlpatterns = [
-    path('menu/', views.accounting_menu, name='accounting_menu'),
+    path('accounting-menu/', views.accounting_menu, name='accounting_menu'),
+    path('accounting-submenu/', views.accounting_submenu, name='accounting_submenu'),
     path('account-types/', views.account_types, name='account_types'),
     path('add-account-type/', views.add_account_type, name='add_account_type'),
     path('edit-account-type/<int:account_type_id>/', views.edit_account_type, name='edit_account_type'),

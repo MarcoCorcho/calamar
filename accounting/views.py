@@ -12,6 +12,11 @@ def accounting_menu(request):
     template_name = 'accounting/accounting-menu.html'
     return render(request, template_name)
 
+# View for Accounting Submenu
+def accounting_submenu(request):
+    template_name = 'accounting/accounting-submenu.html'
+    return render(request, template_name)
+
 # View for Account Types
 def account_types(request):
     account_types = AccountType.objects.all()

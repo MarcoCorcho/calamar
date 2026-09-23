@@ -1,0 +1,26 @@
+{% extends 'master/master-menu.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Accounting Menu</title>
+{% endblock title %}
+
+{% block sidebar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'accounting_submenu' %}">Accounting</a>
+        <a class="nav-link" href="#">Finance</a>
+        <a class="nav-link" href="#">Petty cash fund</a>
+    </li>
+{% endblock sidebar %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Accounting Menu</h1>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{% url 'account_types' %}">List Account Types</a></li>
+            <li class="list-group-item"><a href="{% url 'catalogs' %}">List Catalog</a></li>
+            <li class="list-group-item"><a href="#">List Periods</a></li>
+            <li class="list-group-item"><a href="#">List Accounting Entry Headers</a></li>
+        </ul>
+{% endblock content %}
