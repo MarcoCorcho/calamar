@@ -1,0 +1,19 @@
+{% extends 'master/master.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Add Period</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Add Period</h1>
+        <form method="post" action="{% url 'add_period' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-primary">Add</button>
+            <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import AccountType, Catalog, Period, AccountingEntryHeader, AccountingEntryDetail
-from .forms import AccountTypeForm, CatalogForm
+from .forms import AccountTypeForm, CatalogForm, PeriodForm
 from django.template import loader
 from django.contrib import messages
 
@@ -113,3 +113,52 @@ def delete_catalog(request, catalog_id):
     catalog = Catalog.objects.get(id=catalog_id)
     catalog.delete()
     return redirect('/accounting/catalogs/')
+
+# View for Period
+def periods(request):
+    periods = Period.objects.all()
+    template_name = 'accounting/periods.html'
+    context = {
+        'periods': periods,
+    }
+    return render(request, template_name, context)
+
+# View to add new Period
+def add_period(request):
+    if request.method == 'POST':
+        form = PeriodForm(request.POST)
+        if form.is_valid():
+            description = form.cleaned_data['description']
+            start_date = form.cleaned_data['start_date']
+            end_date = form.cleaned_data['end_date']
+            status = form.cleaned_data['status']
+            Period.objects.create(description=description, start_date=start_date, end_date=end_date, status=status)
+            messages.success(request, 'Period added')
+            return redirect('/accounting/periods/')
+    else:
+        form = PeriodForm()
+        
+    template = loader.get_template('accounting/add-period.html')
+    context = {
+       'form': form,
+    }
+    return HttpResponse(template.render(context, request))
+
+# View to edit an existing Period
+def edit_period(request, period_id):
+    period = get_object_or_404(Period, id=period_id)
+    if request.method == 'POST':
+        form = PeriodForm(request.POST, instance=period)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Period updated')
+            return redirect('/accounting/periods/')
+    else:
+        form = PeriodForm(instance=period)
+    return render(request, 'accounting/edit-period.html', {'form': form, 'period': period})
+
+# View to delete an existing Period
+def delete_period(request, period_id):
+    period = Period.objects.get(id=period_id)
+    period.delete()
+    return redirect('/accounting/periods/')

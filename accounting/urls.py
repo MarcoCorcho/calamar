@@ -13,5 +13,9 @@ urlpatterns = [
     path('catalogs/', views.catalogs, name='catalogs'),
     path('add-catalog/', views.add_catalog, name='add_catalog'),
     path('edit-catalog/<int:catalog_id>/', views.edit_catalog, name='edit_catalog'),
-    path('delete-catalog/<int:account_type_id>/', views.delete_catalog, name='delete_catalog'),
+    path('delete-catalog/<int:catalog_id>/', views.delete_catalog, name='delete_catalog'),
+    path('periods/', views.periods, name='periods'),
+    path('add-period/', views.add_period, name='add_period'),
+    path('edit-period/<int:period_id>/', views.edit_period, name='edit_period'),
+    path('delete-period/<int:period_id>/', views.delete_period, name='delete_period'),
 ]

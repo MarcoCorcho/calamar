@@ -1,0 +1,19 @@
+{% extends 'master/master.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Edit Period</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Edit Period</h1>
+        <form method="post" action="{% url 'edit_period' period.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-outline-primary">Update</button>            
+        </form>
+        <button type="button" onclick="history.back()" class="btn btn-outline-success">Back</button>
+    </div>
+{% endblock content %}
