@@ -18,4 +18,6 @@ urlpatterns = [
     path('add-period/', views.add_period, name='add_period'),
     path('edit-period/<int:period_id>/', views.edit_period, name='edit_period'),
     path('delete-period/<int:period_id>/', views.delete_period, name='delete_period'),
+    path('accounting-entry-headers/', views.accounting_entry_headers, name='accounting_entry_headers'),
+    path('add-accounting-entry-header/', views.add_accouting_entry_header, name='add_accounting_entry_header'),
 ]

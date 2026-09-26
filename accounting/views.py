@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import AccountType, Catalog, Period, AccountingEntryHeader, AccountingEntryDetail
-from .forms import AccountTypeForm, CatalogForm, PeriodForm
+from .forms import AccountTypeForm, CatalogForm, PeriodForm, AccountingEntryHeaderForm
 from django.template import loader
 from django.contrib import messages
 
@@ -17,7 +17,7 @@ def accounting_submenu(request):
     template_name = 'accounting/accounting-submenu.html'
     return render(request, template_name)
 
-# View for Account Types
+# View to list Account Types
 def account_types(request):
     account_types = AccountType.objects.all()
     template_name = 'accounting/account-types.html'
@@ -64,7 +64,7 @@ def delete_account_type(request, account_type_id):
     account_type.delete()
     return redirect('/accounting/account-types/')
 
-# View for Catalog
+# View to list Catalog
 def catalogs(request):
     catalogs = Catalog.objects.all()
     template_name = 'accounting/catalogs.html'
@@ -114,7 +114,7 @@ def delete_catalog(request, catalog_id):
     catalog.delete()
     return redirect('/accounting/catalogs/')
 
-# View for Period
+# View to list Period
 def periods(request):
     periods = Period.objects.all()
     template_name = 'accounting/periods.html'
@@ -162,3 +162,32 @@ def delete_period(request, period_id):
     period = Period.objects.get(id=period_id)
     period.delete()
     return redirect('/accounting/periods/')
+
+# View to list Accounting Entry Header
+def accounting_entry_headers(request):
+    accounting_entry_header = AccountingEntryHeader.objects.all()
+    template_name = 'accounting/accounting-entry-headers.html'
+    context = {
+        'accounting_entry_header': accounting_entry_header,
+    }
+    return render(request, template_name, context)
+
+# View to add new Accouting Entry Header
+def add_accouting_entry_header(request):
+    if request.method == 'POST':
+        form = AccountingEntryHeaderForm(request.POST)
+        if form.is_valid():
+            description = form.cleaned_data['description']
+            period = form.cleaned_data['period']
+            status = form.cleaned_data['status']
+            AccountingEntryHeader.objects.create(description=description, period=period, status=status)
+            messages.success(request, 'Accounting Entry added')
+            return redirect('/accounting/accounting-entry-headers/')
+    else:
+        form = AccountingEntryHeaderForm()
+        
+    template = loader.get_template('accounting/add-accounting-entry-header.html')
+    context = {
+       'form': form,
+    }
+    return HttpResponse(template.render(context, request))
