@@ -11,9 +11,62 @@
         <h1>Add Accounting Entry</h1>
         <form method="post" action="{% url 'add_accounting_entry_header' %}">
             {% csrf_token %}
+            <h3>Accounting Entry Header</h3>
             {{ form.as_p }}
+            <h3>Accounting Entry Details</h3>
+            {{ formset.AccountingEntryDetailFormSet.management_form }}
+            {% for form in formset %}
+                <div class="form-group">
+                    {{ form.as_table }}
+                </div>
+            {% endfor %}
+            <br>
+                <button type="button" class="btn btn-outline-secondary" onclick="addDetail()">+ Add Detail</button>
+            <br>
             <button type="submit" class="btn btn-outline-primary">Add</button>
             <button onclick="history.back()" class="btn btn-outline-success">Back</button>
         </form>
+        <script>
+            function addDetail() {
+                var formsetDiv = document.querySelector('.formset');
+                var totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
+                var totalForms = parseInt(totalFormsInput.value);
+                var newFormHtml = `
+                    <div class="form-group">
+                        <table>
+                            <tr>
+                                <td><label for="id_form-${totalForms}-accounting_entry_header">Accounting Entry Header:</label></td>
+                                <td><select name="form-${totalForms}-accounting_entry_header" id="id_form-${totalForms}-accounting_entry_header">
+                                    {% for header in formset.form.accounting_entry_header.field.queryset %}
+                                        <option value="{{ header.id }}">{{ header.description }}</option>
+                                    {% endfor %}
+                                </select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="id_form-${totalForms}-catalog">Catalog:</label></td>
+                                <td><select name="form-${totalForms}-catalog" id="id_form-${totalForms}-catalog">
+                                    {% for catalog in formset.form.catalog.field.queryset %}
+                                        <option value="{{ catalog.id }}">{{ catalog.name }}</option>
+                                    {% endfor %}
+                                </select></td>
+                            </tr>
+                            <tr>
+                                <td><label for="id_form-${totalForms}-debit">Debit:</label></td>
+                                <td><input type="number" name="form-${totalForms}-debit" step="0.01" id="id_form-${totalForms}-debit"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="id_form-${totalForms}-credit">Credit:</label></td>
+                                <td><input type="number" name="form-${totalForms}-credit" step="0.01" id="id_form-${totalForms}-credit"></td>
+                            </tr>
+                            <tr>
+                                <td><label for="id_form-${totalForms}-status">Status:</label></td>
+                                <td><input type="text" name="form-${totalForms}-status" id="id_form-${totalForms}-status"></td>
+                            </tr>
+                        </table>
+                    </div>`;
+                formsetDiv.insertAdjacentHTML('beforeend', newFormHtml);
+                totalFormsInput.value = totalForms + 1;
+            }
+        </script>
     </div>
 {% endblock content %}

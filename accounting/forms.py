@@ -45,8 +45,17 @@ class AccountingEntryHeaderForm(forms.ModelForm):
         model = AccountingEntryHeader
         fields = ['description', 'period', 'status']
         
-# Form for Accounting Entry Details Model
-class AccoutingEntryDetailsForm(forms.ModelForm):
+# Formset for Accounting Entry Details Model
+AccountingEntryDetailsFormSet = forms.inlineformset_factory(
+    AccountingEntryHeader,
+    AccountingEntryDetail,
+    fields=['accounting_entry_header', 'catalog', 'debit', 'credit', 'status'],
+    extra=2,
+    can_delete=True
+)
+
+# Form for Accounting Entry Details Debit Model 
+class AccoutingEntryDetailsDebitForm(forms.ModelForm):
     accounting_entry_header = forms.ModelChoiceField(queryset=AccountingEntryHeader.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Accounting Entry Header")
     catalog = forms.ModelChoiceField(queryset=Catalog.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Catalog Account")
     debit = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0.00', 'step': '0.01', 'min': '0'}))
@@ -55,4 +64,16 @@ class AccoutingEntryDetailsForm(forms.ModelForm):
     
     class Meta:
         model = AccountingEntryDetail
-        fields = ['accounting_entry_header', 'catalog', 'debit', 'credit', 'status']
+        fields = ['accounting_entry_header', 'catalog', 'debit', 'status']
+        
+# Form for Accounting Entry Details Credit Model 
+class AccoutingEntryDetailsCreditForm(forms.ModelForm):
+    accounting_entry_header = forms.ModelChoiceField(queryset=AccountingEntryHeader.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Accounting Entry Header")
+    catalog = forms.ModelChoiceField(queryset=Catalog.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Catalog Account")
+    debit = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0.00', 'step': '0.01', 'min': '0'}))
+    credit = forms.DecimalField(max_digits=10, decimal_places=2, widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': '0.00', 'step': '0.01', 'min': '0'}))
+    status = forms.BooleanField(required=False, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    
+    class Meta:
+        model = AccountingEntryDetail
+        fields = ['accounting_entry_header', 'catalog', 'credit', 'status']

@@ -1,9 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import AccountType, Catalog, Period, AccountingEntryHeader, AccountingEntryDetail
-from .forms import AccountTypeForm, CatalogForm, PeriodForm, AccountingEntryHeaderForm
+from .forms import AccountTypeForm, CatalogForm, PeriodForm, AccountingEntryHeaderForm, AccountingEntryDetailsFormSet
 from django.template import loader
 from django.contrib import messages
+from django.db import transaction
 
 # Create your views here.
 
@@ -176,18 +177,25 @@ def accounting_entry_headers(request):
 def add_accouting_entry_header(request):
     if request.method == 'POST':
         form = AccountingEntryHeaderForm(request.POST)
-        if form.is_valid():
-            description = form.cleaned_data['description']
-            period = form.cleaned_data['period']
-            status = form.cleaned_data['status']
-            AccountingEntryHeader.objects.create(description=description, period=period, status=status)
+        formset = AccountingEntryDetailsFormSet(request.POST)
+        if form.is_valid() and formset.is_valid():
+            with transaction.atomic():
+                accounting_entry_header = form.save()
+                formset.instance = accounting_entry_header
+                formset.save()
+            #description = form.cleaned_data['description']
+            #period = form.cleaned_data['period']
+            #status = form.cleaned_data['status']
+            #AccountingEntryHeader.objects.create(description=description, period=period, status=status)
             messages.success(request, 'Accounting Entry added')
             return redirect('/accounting/accounting-entry-headers/')
     else:
         form = AccountingEntryHeaderForm()
+        formset = AccountingEntryDetailsFormSet()
         
     template = loader.get_template('accounting/add-accounting-entry-header.html')
     context = {
        'form': form,
+       'formset': formset
     }
     return HttpResponse(template.render(context, request))
