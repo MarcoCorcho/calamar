@@ -14,59 +14,92 @@
             <h3>Accounting Entry Header</h3>
             {{ form.as_p }}
             <h3>Accounting Entry Details</h3>
-            {{ formset.AccountingEntryDetailFormSet.management_form }}
-            {% for form in formset %}
-                <div class="form-group">
-                    {{ form.as_table }}
-                </div>
-            {% endfor %}
+            {{ formset.management_form }}
+            <table id="formset-table">
+                <thead>
+                    <tr>
+                        <th>Accounting Entry Header</th>
+                        <th>Catalog</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                        <th>Status</th>
+                        <th>delete</th>
+                    </tr>
+                </thead>
+                <tbody class="formset">
+                    {% for form in formset %}
+                        <tr class="formset-row">
+                            <td>{{ form.accounting_entry_header }}</td>
+                            <td>{{ form.catalog }}</td>
+                            <td>{{ form.debit }}</td>
+                            <td>{{ form.credit }}</td>
+                            <td>{{ form.status }}</td>
+                            <td>{% if formset.can_delete %}{{ form.DELETE }}{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+
+                    <!-- MOLDE VACÍO (Oculto, usado exclusivamente por JavaScript) -->
+                    <tr id="form-hidden" class="hidden" style="display: none;">
+                        {{ formset.empty_form.id }}
+                        <td>{{ formset.empty_form.accounting_entry_header }}</td>
+                        <td>{{ formset.empty_form.catalog }}</td>
+                        <td>{{ formset.empty_form.debit }}</td>
+                        <td>{{ formset.empty_form.credit }}</td>
+                        <td>{{ formset.empty_form.status }}</td>
+                        <td>{% if formset.can_delete %}{{ form.DELETE }}{% endif %}</td>
+                </tr>
+                </tbody>
             <br>
-                <button type="button" class="btn btn-outline-secondary" onclick="addDetail()">+ Add Detail</button>
-            <br>
-            <button type="submit" class="btn btn-outline-primary">Add</button>
-            <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="addDetail()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-plus" viewBox="0 0 16 16">
+                        <path d="M8 6.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V11a.5.5 0 0 1-1 0V9.5H6a.5.5 0 0 1 0-1h1.5V7a.5.5 0 0 1 .5-.5"/>
+                        <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
+                    </svg>
+                    Add Detail
+                </button>
+            <br><br>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-outline-primary">Add</button>
+                <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+            </div>
         </form>
-        <script>
-            function addDetail() {
-                var formsetDiv = document.querySelector('.formset');
-                var totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
-                var totalForms = parseInt(totalFormsInput.value);
-                var newFormHtml = `
-                    <div class="form-group">
-                        <table>
-                            <tr>
-                                <td><label for="id_form-${totalForms}-accounting_entry_header">Accounting Entry Header:</label></td>
-                                <td><select name="form-${totalForms}-accounting_entry_header" id="id_form-${totalForms}-accounting_entry_header">
-                                    {% for header in formset.form.accounting_entry_header.field.queryset %}
-                                        <option value="{{ header.id }}">{{ header.description }}</option>
-                                    {% endfor %}
-                                </select></td>
-                            </tr>
-                            <tr>
-                                <td><label for="id_form-${totalForms}-catalog">Catalog:</label></td>
-                                <td><select name="form-${totalForms}-catalog" id="id_form-${totalForms}-catalog">
-                                    {% for catalog in formset.form.catalog.field.queryset %}
-                                        <option value="{{ catalog.id }}">{{ catalog.name }}</option>
-                                    {% endfor %}
-                                </select></td>
-                            </tr>
-                            <tr>
-                                <td><label for="id_form-${totalForms}-debit">Debit:</label></td>
-                                <td><input type="number" name="form-${totalForms}-debit" step="0.01" id="id_form-${totalForms}-debit"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="id_form-${totalForms}-credit">Credit:</label></td>
-                                <td><input type="number" name="form-${totalForms}-credit" step="0.01" id="id_form-${totalForms}-credit"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="id_form-${totalForms}-status">Status:</label></td>
-                                <td><input type="text" name="form-${totalForms}-status" id="id_form-${totalForms}-status"></td>
-                            </tr>
-                        </table>
-                    </div>`;
-                formsetDiv.insertAdjacentHTML('beforeend', newFormHtml);
-                totalFormsInput.value = totalForms + 1;
-            }
-        </script>
     </div>
+
+    <script>
+        function addDetail() {
+            const formsetTable = document.getElementById('formset-table').getElementsByTagName('tbody')[0];
+            const hiddenRow = document.getElementById('form-hidden');
+    
+            // Clonamos la fila oculta
+            const newRow = hiddenRow.cloneNode(true);
+            newRow.removeAttribute('id');
+            newRow.style.display = ''; // Quitamos el style de oculto
+            newRow.classList.remove('hidden');
+
+            // Buscamos el input del total de formularios de Django
+            // Nota: Si usaste un prefix personalizado en tu views.py, cambia 'form' por tu prefijo
+            const totalFormsInput = document.querySelector('[id$="-TOTAL_FORMS"]');
+    
+            if (!totalFormsInput) {
+                console.error("No se encontró el input de TOTAL_FORMS. Verifica el management_form.");
+            return;
+        }
+
+            const totalForms = parseInt(totalFormsInput.value);
+    
+            // Obtenemos el prefijo real del formset (por defecto es 'form')
+            const prefix = totalFormsInput.id.replace('-TOTAL_FORMS', '').replace('id_', '');
+
+            // Reemplazamos __prefix__ por el número correlativo actual
+            const regex = new RegExp('__prefix__', 'g');
+            newRow.innerHTML = newRow.innerHTML.replace(regex, totalForms);
+
+            // Incrementamos el contador total en el management_form
+            totalFormsInput.value = totalForms + 1;
+
+            // Insertamos la nueva fila en la tabla
+            formsetTable.appendChild(newRow);
+        }
+    </script>
 {% endblock content %}

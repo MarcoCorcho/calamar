@@ -12,8 +12,11 @@
         <form method="post" action="{% url 'add_account_type' %}">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" class="btn btn-outline-primary">Add</button>
-            <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-outline-primary">Add</button>
+                <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+            </div>
         </form>
     </div>
 {% endblock content %}
