@@ -166,15 +166,15 @@ def delete_period(request, period_id):
 
 # View to list Accounting Entry Header
 def accounting_entry_headers(request):
-    accounting_entry_header = AccountingEntryHeader.objects.all()
+    accounting_entry_headers = AccountingEntryHeader.objects.all()
     template_name = 'accounting/accounting-entry-headers.html'
     context = {
-        'accounting_entry_header': accounting_entry_header,
+        'accounting_entry_headers': accounting_entry_headers,
     }
     return render(request, template_name, context)
 
 # View to add new Accouting Entry Header
-def add_accouting_entry_header(request):
+def add_accounting_entry_header(request):
     if request.method == 'POST':
         form = AccountingEntryHeaderForm(request.POST)
         formset = AccountingEntryDetailsFormSet(request.POST)
@@ -183,10 +183,6 @@ def add_accouting_entry_header(request):
                 accounting_entry_header = form.save()
                 formset.instance = accounting_entry_header
                 formset.save()
-            #description = form.cleaned_data['description']
-            #period = form.cleaned_data['period']
-            #status = form.cleaned_data['status']
-            #AccountingEntryHeader.objects.create(description=description, period=period, status=status)
             messages.success(request, 'Accounting Entry added')
             return redirect('/accounting/accounting-entry-headers/')
     else:
@@ -199,3 +195,20 @@ def add_accouting_entry_header(request):
        'formset': formset
     }
     return HttpResponse(template.render(context, request))
+
+# View to edit an existing Accounting Entry Header
+def edit_accounting_entry_header(request, accounting_entry_header_id):
+    accounting_entry_header = get_object_or_404(AccountingEntryHeader, id=accounting_entry_header_id)
+    if request.method == 'POST':
+        form = AccountingEntryHeaderForm(request.POST, instance=accounting_entry_header)
+        formset = AccountingEntryDetailsFormSet(request.POST, instance=accounting_entry_header)
+        if form.is_valid() and formset.is_valid():
+            with transaction.atomic():
+                form.save()
+                formset.save()
+            messages.success(request, 'Accounting Entry updated')
+            return redirect('/accounting/accounting-entry-headers/')
+    else:
+        form = AccountingEntryHeaderForm(instance=accounting_entry_header)
+        formset = AccountingEntryDetailsFormSet(instance=accounting_entry_header)
+    return render(request, 'accounting/edit-accounting-entry-header.html', {'form': form, 'formset': formset, 'accounting_entry_header': accounting_entry_header})

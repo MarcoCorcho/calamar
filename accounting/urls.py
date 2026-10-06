@@ -19,5 +19,6 @@ urlpatterns = [
     path('edit-period/<int:period_id>/', views.edit_period, name='edit_period'),
     path('delete-period/<int:period_id>/', views.delete_period, name='delete_period'),
     path('accounting-entry-headers/', views.accounting_entry_headers, name='accounting_entry_headers'),
-    path('add-accounting-entry-header/', views.add_accouting_entry_header, name='add_accounting_entry_header'),
+    path('add-accounting-entry-header/', views.add_accounting_entry_header, name='add_accounting_entry_header'),
+    path('edit-accounting-entry-header/<int:accounting_entry_header_id>/', views.edit_accounting_entry_header, name='edit_accounting_entry_header'),
 ]

@@ -1,4 +1,5 @@
 from django import forms
+from django.forms.models import BaseInlineFormSet
 from .models import AccountType, Catalog, Period, AccountingEntryHeader, AccountingEntryDetail
 
 # Create your forms here.
@@ -45,11 +46,24 @@ class AccountingEntryHeaderForm(forms.ModelForm):
         model = AccountingEntryHeader
         fields = ['description', 'period', 'status']
         
+# Class for Base Accounting Entry Details Model
+class BaseAccountingEntryDetailsFormSet(BaseInlineFormSet):
+    def __init__(self, *args, **kwargs):
+        # El argumento 'instance' representa el registro padre (Header)
+        instance = kwargs.get('instance', None)
+        
+        # Si la instancia ya existe en la base de datos (tiene ID), no agregamos líneas extra
+        if instance and instance.pk:
+            self.extra = 0
+            
+        super().__init__(*args, **kwargs)
+        
 # Formset for Accounting Entry Details Model
 AccountingEntryDetailsFormSet = forms.inlineformset_factory(
     AccountingEntryHeader,
     AccountingEntryDetail,
     fields=['accounting_entry_header', 'catalog', 'debit', 'credit', 'status'],
+    formset=BaseAccountingEntryDetailsFormSet,
     extra=2,
     can_delete=True
 )

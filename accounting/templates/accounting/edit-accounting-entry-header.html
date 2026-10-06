@@ -3,13 +3,13 @@
 {% load static %}
 
 {% block title %}
-    <title>Add Accounting Entry</title>
+    <title>Edit Accounting Entry</title>
 {% endblock title %}
 
 {% block content %}
     <div class="container mt-4">
-        <h1>Add Accounting Entry</h1>
-        <form id="accounting-entry-form" method="post" action="{% url 'add_accounting_entry_header' %}">
+        <h1>Edit Accounting Entry</h1>
+        <form id="accounting-entry-form" method="post" action="{% url 'edit_accounting_entry_header' accounting_entry_header.id %}">
             {% csrf_token %}
             <h3>Accounting Entry Header</h3>
             {{ form.as_p }}
@@ -29,6 +29,7 @@
                 <tbody class="formset">
                     {% for form in formset %}
                         <tr class="formset-row">
+                            {{ form.id}}
                             <td>{{ form.accounting_entry_header }}</td>
                             <td>{{ form.catalog }}</td>
                             <td>{{ form.debit }}</td>
@@ -72,7 +73,7 @@
             <br><br>
 
             <div class="d-flex justify-content-between mt-4">
-                <button type="submit" class="btn btn-outline-primary">Add</button>
+                <button type="submit" class="btn btn-outline-primary">Update</button>
                 <button onclick="history.back()" class="btn btn-outline-success">Back</button>
             </div>
         </form>
