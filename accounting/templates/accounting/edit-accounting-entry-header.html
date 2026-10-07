@@ -85,18 +85,31 @@
             let totalDebit = 0;
             let totalCredit = 0;
 
-            // Buscamos todos los inputs de débito y crédito exceptuando la fila oculta (molde)
-            const debitInputs = document.querySelectorAll('tbody.formset tr:not(#form-hidden) input[id$="-debit"]');
-            const creditInputs = document.querySelectorAll('tbody.formset tr:not(#form-hidden) input[id$="-credit"]');
+            // Buscamos todas las filas activas (excepto el molde oculto)
+            const rows = document.querySelectorAll('tbody.formset tr:not(#form-hidden)');
 
-            debitInputs.forEach(input => {
-                const val = parseFloat(input.value) || 0;
-                totalDebit += val;
-            });
+            rows.forEach(row => {
+                // Buscamos el checkbox de eliminación en esta fila
+                const deleteCheckbox = row.querySelector('input[id$="-DELETE"]');
+        
+                // Si la fila está marcada para eliminar, la ignoramos en el cálculo
+                if (deleteCheckbox && deleteCheckbox.checked) {
+                    row.style.opacity = '0.5'; // Opcional: opacidad visual para notar que se borrará
+                    return; 
+                } else {
+                    row.style.opacity = '1';
+                }
 
-            creditInputs.forEach(input => {
-            const val = parseFloat(input.value) || 0;
-            totalCredit += val;
+                // Buscamos los inputs de débito y crédito de la fila actual
+                const debitInput = row.querySelector('input[id$="-debit"]');
+                const creditInput = row.querySelector('input[id$="-credit"]');
+
+                if (debitInput) {
+                    totalDebit += parseFloat(debitInput.value) || 0;
+                }
+                if (creditInput) {
+                    totalCredit += parseFloat(creditInput.value) || 0;
+                }
             });
 
             // Actualizar textos en el tfoot
@@ -117,10 +130,10 @@
         function addDetail() {
             const formsetTable = document.getElementById('formset-table').getElementsByTagName('tbody')[0];
             const hiddenRow = document.getElementById('form-hidden');
-
             const newRow = hiddenRow.cloneNode(true);
+    
             newRow.removeAttribute('id');
-            newRow.style.display = ''; 
+            newRow.style.display = '';
             newRow.classList.remove('hidden');
 
             const totalFormsInput = document.querySelector('[id$="-TOTAL_FORMS"]');
@@ -128,10 +141,11 @@
                 console.error("No se encontró el input de TOTAL_FORMS. Verifica el management_form.");
                 return;
             }
+
             const totalForms = parseInt(totalFormsInput.value);
             const regex = new RegExp('__prefix__', 'g');
             newRow.innerHTML = newRow.innerHTML.replace(regex, totalForms);
-
+    
             totalFormsInput.value = totalForms + 1;
             formsetTable.appendChild(newRow);
 
@@ -141,33 +155,43 @@
 
         // Asignar listeners de cambio a una fila específica
         function addNewRowEventListeners(row) {
+            // Escuchar cambios en inputs numéricos
             const inputs = row.querySelectorAll('input[id$="-debit"], input[id$="-credit"]');
             inputs.forEach(input => {
-            input.addEventListener('input', calculateTotals);
+                input.addEventListener('input', calculateTotals);
             });
+
+            // NUEVO: Escuchar cambios en el checkbox de eliminar
+            const deleteCheckbox = row.querySelector('input[id$="-DELETE"]');
+            if (deleteCheckbox) {
+                deleteCheckbox.addEventListener('change', calculateTotals);
+            }
         }
 
         // Inicialización al cargar la página
         document.addEventListener('DOMContentLoaded', () => {
-        // Escuchar cambios en las filas iniciales cargadas por Django
-        const rows = document.querySelectorAll('tbody.formset tr:not(#form-hidden)');
-        rows.forEach(row => addNewRowEventListeners(row));
+            // Escuchar cambios en las filas iniciales cargadas por Django
+            const rows = document.querySelectorAll('tbody.formset tr:not(#form-hidden)');
+            rows.forEach(row => addNewRowEventListeners(row));
 
-        // Calcular totales por primera vez
-        calculateTotals();
+            // Calcular totales por primera vez
+            calculateTotals();
 
-        // Validar antes de enviar el formulario para que no guarde si está descuadrado
-        document.getElementById('accounting-entry-form').addEventListener('submit', function(e) {
-            const totalDebit = parseFloat(document.getElementById('total-debit').innerText) || 0;
-            const totalCredit = parseFloat(document.getElementById('total-credit').innerText) || 0;
+            // Validar antes de enviar el formulario para que no guarde si está descuadrado
+            document.getElementById('accounting-entry-form').addEventListener('submit', function(e) {
+                // Forzamos un último cálculo antes de evaluar
+                calculateTotals(); 
 
-            if (Math.abs(totalDebit - totalCredit) >= 0.01) {
-                e.preventDefault(); // Detiene el envío
-                alert("No se puede guardar el asiento: El total de Débito y Crédito no cuadra.");
-            } else if (totalDebit === 0 && totalCredit === 0) {
-                e.preventDefault();
-                alert("No se puede guardar un asiento vacío con montos en cero.");
-            }
+                const totalDebit = parseFloat(document.getElementById('total-debit').innerText) || 0;
+                const totalCredit = parseFloat(document.getElementById('total-credit').innerText) || 0;
+
+                if (Math.abs(totalDebit - totalCredit) >= 0.01) {
+                    e.preventDefault(); // Detiene el envío
+                    alert("No se puede guardar el asiento: El total de Débito y Crédito no cuadra con las filas restantes.");
+                } else if (totalDebit === 0 && totalCredit === 0) {
+                    e.preventDefault();
+                    alert("No se puede guardar un asiento vacío o con todos sus elementos eliminados.");
+                }
             });
         });
     </script>

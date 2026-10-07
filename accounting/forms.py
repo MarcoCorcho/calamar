@@ -7,7 +7,7 @@ from .models import AccountType, Catalog, Period, AccountingEntryHeader, Account
 # Form for AccountType model
 class AccountTypeForm(forms.ModelForm):
     description = forms.CharField(max_length=20, label='Description', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    status = forms.BooleanField(required=False, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    status = forms.BooleanField(required=False, initial=True, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
 
     class Meta:
         model = AccountType
@@ -17,9 +17,9 @@ class AccountTypeForm(forms.ModelForm):
 class CatalogForm(forms.ModelForm):
     code = forms.CharField(max_length=20, label='Code', widget=forms.TextInput(attrs={'class': 'form-control'}))
     description = forms.CharField(max_length=100, label='Description', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    status = forms.BooleanField(required=False, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
-    parent = forms.ModelChoiceField(required=False, queryset=Catalog.objects.all(), empty_label="-- Select an account --", to_field_name="id", label="Parent Account")
-    account_type = forms.ModelChoiceField(queryset=AccountType.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Account Type")
+    status = forms.BooleanField(required=False, initial=True, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    parent = forms.ModelChoiceField(required=False, queryset=Catalog.objects.filter(status=True), empty_label="-- Select an account --", to_field_name="id", label="Parent Account")
+    account_type = forms.ModelChoiceField(queryset=AccountType.objects.filter(status=True), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Account Type")
 
     class Meta:
         model = Catalog
@@ -30,7 +30,7 @@ class PeriodForm(forms.ModelForm):
     description = forms.CharField(max_length=100, label='Description', widget=forms.TextInput(attrs={'class': 'form-control'}))
     start_date = forms.DateField(required=True, label="Select start date", widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date', 'class': 'form-control'}))
     end_date = forms.DateField(required=True, label="Select end date", widget=forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date', 'class': 'form-control'}))
-    status = forms.BooleanField(required=False, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    status = forms.BooleanField(required=False, initial=True, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
     
     class Meta:
         model = Period
@@ -39,8 +39,8 @@ class PeriodForm(forms.ModelForm):
 # Form for Accounting Entry Header Model
 class AccountingEntryHeaderForm(forms.ModelForm):
     description = forms.CharField(max_length=100, label='Description', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    period = forms.ModelChoiceField(queryset=Period.objects.all(), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Period")
-    status = forms.BooleanField(required=False, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    period = forms.ModelChoiceField(queryset=Period.objects.filter(status=True), empty_label="-- Select a Type --", to_field_name="id", required=True, label="Period")
+    status = forms.BooleanField(required=False, initial=True, label='Active', widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
     
     class Meta:
         model = AccountingEntryHeader
@@ -62,7 +62,7 @@ class BaseAccountingEntryDetailsFormSet(BaseInlineFormSet):
 AccountingEntryDetailsFormSet = forms.inlineformset_factory(
     AccountingEntryHeader,
     AccountingEntryDetail,
-    fields=['accounting_entry_header', 'catalog', 'debit', 'credit', 'status'],
+    fields=['catalog', 'debit', 'credit', 'status'],
     formset=BaseAccountingEntryDetailsFormSet,
     extra=2,
     can_delete=True

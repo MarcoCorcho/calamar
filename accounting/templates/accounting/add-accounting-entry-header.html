@@ -23,7 +23,6 @@
                         <th>Debit</th>
                         <th>Credit</th>
                         <th>Status</th>
-                        <th>delete</th>
                     </tr>
                 </thead>
                 <tbody class="formset">
@@ -34,7 +33,6 @@
                             <td>{{ form.debit }}</td>
                             <td>{{ form.credit }}</td>
                             <td>{{ form.status }}</td>
-                            <td>{% if formset.can_delete %}{{ form.DELETE }}{% endif %}</td>
                         </tr>
                     {% endfor %}
 
@@ -46,7 +44,6 @@
                         <td>{{ formset.empty_form.debit }}</td>
                         <td>{{ formset.empty_form.credit }}</td>
                         <td>{{ formset.empty_form.status }}</td>
-                        <td>{% if formset.can_delete %}{{ formset.empty_form.DELETE }}{% endif %}</td>
                     </tr>
                 </tbody>
                 <!-- PIE DE TABLA: Aquí se muestran los totales y la validación -->
