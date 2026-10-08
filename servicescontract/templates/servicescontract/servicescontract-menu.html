@@ -1,0 +1,16 @@
+{% extends 'master/master-menu.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Services Contract Menu</title>
+{% endblock title %}
+
+{% block sidebar %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'servicescontract_submenu' %}">Advertising Space</a>
+        <a class="nav-link" href="#">Contract Management</a>
+    </li>
+{% endblock sidebar %}
+
+{% block content %}{% endblock content %}

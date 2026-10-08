@@ -1,0 +1,22 @@
+{% extends 'master/master.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Add Company</title>
+{% endblock title %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Add Company</h1>
+        <form method="post" action="{% url 'add_company' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-outline-primary">Add</button>
+                <button onclick="history.back()" class="btn btn-outline-success">Back</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

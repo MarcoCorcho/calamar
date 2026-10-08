@@ -1,0 +1,23 @@
+{% extends 'master/master-menu.html' %}
+
+{% load static %}
+
+{% block title %}
+    <title>Configuration Menu</title>
+{% endblock title %}
+
+{% block sidebar %}
+    <li class="nav-item">
+        <a class="nav-link" href="#">Company</a>
+        <a class="nav-link" href="#">Submenu 2</a>
+    </li>
+{% endblock sidebar %}
+
+{% block content %}
+    <div class="container mt-4">
+        <h1>Configuration Menu</h1>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{% url 'companies' %}">Manage Company</a></li>
+            <li class="list-group-item"><a href="#">Manage Outlet</a></li>
+        </ul>
+{% endblock content %}
