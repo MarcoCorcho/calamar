@@ -34,7 +34,7 @@
                         {% for account_type in account_types %}
                             <tr>
                                 <td>{{ account_type.description }}</td>
-                                <td>{{ account_type.status }}</td>
+                                <td>{{ account_type.status|yesno:"Active,Inactive" }}</td>
                                 <td>{{ account_type.created_at }}</td>
                                 <td>{{ account_type.updated_at }}</td>
                                 <td>

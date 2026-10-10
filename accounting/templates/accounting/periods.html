@@ -38,7 +38,7 @@
                                 <td>{{ period.description }}</td>
                                 <td>{{ period.start_date }}</td>
                                 <td>{{ period.end_date }}</td>
-                                <td>{{ period.status }}
+                                <td>{{ period.status|yesno:"Active,Inactive" }}
                                 <td>{{ period.created_at }}</td>
                                 <td>{{ period.updated_at }}</td>
                                 <td>

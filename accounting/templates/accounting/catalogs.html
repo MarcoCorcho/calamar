@@ -38,7 +38,7 @@
                             <tr>
                                 <td>{{ catalog.code }}</td>
                                 <td>{{ catalog.description }}</td>
-                                <td>{{ catalog.status }}</td>
+                                <td>{{ catalog.status|yesno:"Active,Inactive" }}</td>
                                 <td>{{ catalog.parent }}</td>
                                 <td>{{ catalog.account_type }}
                                 <td>{{ catalog.created_at }}</td>

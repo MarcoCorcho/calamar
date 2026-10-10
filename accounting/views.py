@@ -63,6 +63,7 @@ def edit_account_type(request, account_type_id):
 def delete_account_type(request, account_type_id):
     account_type = AccountType.objects.get(id=account_type_id)
     account_type.delete()
+    messages.success(request, 'Account Type deleted')
     return redirect('/accounting/account-types/')
 
 # View to list Catalog
@@ -113,6 +114,7 @@ def edit_catalog(request, catalog_id):
 def delete_catalog(request, catalog_id):
     catalog = Catalog.objects.get(id=catalog_id)
     catalog.delete()
+    messages.success(request, 'Catalog deleted')
     return redirect('/accounting/catalogs/')
 
 # View to list Period
@@ -162,6 +164,7 @@ def edit_period(request, period_id):
 def delete_period(request, period_id):
     period = Period.objects.get(id=period_id)
     period.delete()
+    messages.success(request, 'Period deleted')
     return redirect('/accounting/periods/')
 
 # View to list Accounting Entry Header
