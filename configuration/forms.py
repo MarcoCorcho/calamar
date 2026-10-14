@@ -1,5 +1,6 @@
 from django import forms
-from .models import Company, Outlet
+from .models import Company, Outlet, CompanyCatalog
+from accounting.models import Catalog
 
 # Create your forms here.
 
@@ -27,3 +28,14 @@ class OutletForm(forms.ModelForm):
     class Meta:
         model = Outlet
         fields = ['company', 'name', 'address', 'phone_number', 'email', 'status']
+        
+# Form for Company Catalog
+class CompanyCatalogForm(forms.ModelForm):
+    company = forms.ModelChoiceField(queryset=Company.objects.filter(status=True), empty_label="-- Select a Company --", to_field_name="id", required=True, label="Company")
+    catalog = forms.ModelChoiceField(queryset=Catalog.objects.filter(status=True), empty_label="-- Select a Catalog --", to_field_name="id", required=True, label="Catalog")
+    description = forms.CharField(max_length=100, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    status = forms.BooleanField(required=False, initial=True, widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}))
+    
+    class Meta:
+        model = CompanyCatalog
+        fields = ['company', 'catalog', 'description', 'status']

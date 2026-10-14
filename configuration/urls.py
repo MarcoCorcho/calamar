@@ -14,4 +14,8 @@ urlpatterns = [
     path('add-outlet/', views.add_outlet, name='add_outlet'),
     path('edit-outlet/<int:outlet_id>/', views.edit_outlet, name='edit_outlet'),
     path('delete-outlet/<int:outlet_id>/', views.delete_outlet, name='delete_outlet'),
+    path('company-catalogs/', views.company_catalogs, name='company_catalogs'),
+    path('add-company-catalog/', views.add_company_catalog, name='add_company_catalog'),
+    path('edit-company-catalog/<int:company_catalog_id>/', views.edit_company_catalog, name='edit_company_catalog'),
+    path('delete-company-catalog/<int:company_catalog_id>/', views.delete_company_catalog, name='delete_company_catalog'),
 ]

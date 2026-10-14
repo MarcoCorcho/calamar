@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Company, Outlet
+from .models import Company, Outlet, CompanyCatalog
 
 # Register your models here.
 
@@ -14,6 +14,13 @@ class OutletAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ('name', 'email')
     readonly_fields = ('created_at', 'updated_at')
+    
+class CompanyCatalogAdmin(admin.ModelAdmin):
+    list_display = ('company', 'catalog', 'description', 'status', 'created_at', 'updated_at')
+    list_filter = ('status',)
+    search_fields = ('company__name', 'catalog__description')
+    readonly_fields = ('created_at', 'updated_at')
 
 admin.site.register(Company, CompanyAdmin)
 admin.site.register(Outlet, OutletAdmin)
+admin.site.register(CompanyCatalog, CompanyCatalogAdmin)
