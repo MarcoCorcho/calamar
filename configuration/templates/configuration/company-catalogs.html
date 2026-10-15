@@ -36,7 +36,7 @@
                         {% for company_catalog in company_catalogs %}
                             <tr>
                                 <td>{{ company_catalog.company.name }}</td>
-                                <td>{{ company_catalog.catalog.name }}</td>
+                                <td>{{ company_catalog.catalog.description }}</td>
                                 <td>{{ company_catalog.description }}</td>
                                 <td>{{ company_catalog.status|yesno:"Active,Inactive" }}</td>
                                 <td>{{ company_catalog.created_at }}</td>
