@@ -16,7 +16,8 @@ class AreaForm(forms.ModelForm):
         
 # Form for Advertising Space
 class AdvertisingSpaceForm(forms.ModelForm):
-    area = forms.ModelChoiceField(queryset=Area.objects.all(), label='Area', required=True)
+    outlet = forms.ModelChoiceField(queryset=Outlet.objects.all(), label='Outlet', required=True)
+    area = forms.ModelChoiceField(queryset=Area.objects.filter(outlet__isnull=False), label='Area', required=True)
     name = forms.CharField(max_length=200, label='Advertising Space Name', required=True)
     description = forms.CharField(widget=forms.Textarea, label='Description', required=True)
     width = forms.FloatField(label='Width', required=True)
@@ -26,7 +27,7 @@ class AdvertisingSpaceForm(forms.ModelForm):
     
     class Meta:
         model = AdvertisingSpace
-        fields = ['area', 'name', 'description', 'width', 'height', 'price', 'status']
+        fields = ['outlet', 'area', 'name', 'description', 'width', 'height', 'price', 'status']
         
 # Form for Client
 class ClientForm(forms.ModelForm):
